@@ -40,3 +40,5 @@ Route::get('/questions', 'App\Http\Controllers\QuizQuestion@load');
 //});
 
 Route::get('/questions', 'App\Http\Controllers\QuizQuestion@showQuestions')->name('questions');
+
+Route::post('/test-result', 'App\Http\Controllers\TestResultController@createTestResult')->name('createTestResult');

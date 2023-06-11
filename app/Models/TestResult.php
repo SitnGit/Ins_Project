@@ -13,4 +13,10 @@ class TestResult extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected $fillable = [
+        'user_id',
+        'chars_values',
+    ];
+    protected $table = 'testresults';
 }
