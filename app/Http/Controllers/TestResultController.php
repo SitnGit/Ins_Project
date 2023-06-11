@@ -7,6 +7,14 @@ use App\Models\TestResult;
 
 class TestResultController extends Controller
 {
+    public function showTestResults()
+    {
+        $userId = auth()->id();
+        $testResults = TestResult::where('user_id', $userId)->get();
+
+        return view('partials.testresult', compact('testResults'));
+    }
+
     public function createTestResult(Request $request)
     {
 
@@ -38,7 +46,7 @@ class TestResultController extends Controller
             'user_id' => $userId,
             'chars_values' => json_encode($questionSliderValues),
         ]);
-
+        return redirect()->route('showTestResults');
     }
 
 
