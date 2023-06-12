@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');;
 
 Route::middleware([
     'auth:sanctum',
@@ -43,4 +43,4 @@ Route::get('/questions', 'App\Http\Controllers\QuizQuestion@showQuestions')->nam
 
 Route::post('/test-result', 'App\Http\Controllers\TestResultController@createTestResult')->name('createTestResult');
 
-Route::get('/show-test-results', 'App\Http\Controllers\TestResultController@showTestResults')->name('showTestResults');
+Route::get('/show-test-results', 'App\Http\Controllers\TestResultController@showTestResult')->name('showTestResult');

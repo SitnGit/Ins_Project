@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TestResult;
+use App\Models\Question;
+use Illuminate\Support\Facades\Log;
+use Ramsey\Uuid\Type\Integer;
 
 class TestResultController extends Controller
 {
-    public function showTestResults()
+    public function showTestResult()
     {
         $userId = auth()->id();
-        $testResults = TestResult::where('user_id', $userId)->get();
+        $testResult = TestResult::where('user_id', $userId)->latest()->first();
 
-        return view('partials.testresult', compact('testResults'));
+        return view('partials.testresult', compact('testResult'));
     }
 
     public function createTestResult(Request $request)
@@ -31,22 +34,32 @@ class TestResultController extends Controller
 
         // Create an empty array to store the question IDs and slider values
         $questionSliderValues = [];
-
+        for ($i = 1; $i <= 10; $i++) {
+            $questionSliderValues[strval($i)] = 0;
+        }
         // Combine the question IDs and slider values into a dictionary
         $questionIds = $validatedData['questionIds'];
         $sliderValues = $validatedData['sliderValues'];
+//        foreach ($questionIds as $index => $questionId) {
+//
+//            $sliderValue = $sliderValues[$questionId];
+//            $questionSliderValues[$questionId] = $sliderValue;
+//
+//        }
         foreach ($questionIds as $index => $questionId) {
-
-            $sliderValue = $sliderValues[$questionId];
-            $questionSliderValues[$questionId] = $sliderValue;
-
+            $question = Question::find($questionId);
+            $chars = $question->characteristics;
+            $chars = json_decode($chars, true);
+            $sliderValue = intval($sliderValues[$questionId]);
+            $questionSliderValues[$chars["1"]] = $sliderValue;
+            $questionSliderValues[$chars["2"]] = 100 - $sliderValue;
         }
         // Create and store the TestResult object in the database
         TestResult::create([
             'user_id' => $userId,
             'chars_values' => json_encode($questionSliderValues),
         ]);
-        return redirect()->route('showTestResults');
+        return redirect()->route('showTestResult');
     }
 
 
