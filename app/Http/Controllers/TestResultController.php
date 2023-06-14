@@ -10,12 +10,25 @@ use Ramsey\Uuid\Type\Integer;
 
 class TestResultController extends Controller
 {
-    public function showTestResult()
+    public function show($id)
     {
-        $userId = auth()->id();
-        $testResult = TestResult::where('user_id', $userId)->latest()->first();
+//        $userId = auth()->id();
+//        $testResult = TestResult::where('user_id', $userId)->latest()->first();
+//
+//        return view('partials.testresult', compact('testResult'));
 
-        return view('partials.testresult', compact('testResult'));
+        // Retrieve the test result from the database based on the ID
+        $testResult = TestResult::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$testResult) {
+            // Handle the case where the test result is not found
+            abort(404);
+        }
+
+        // Pass the test result to the view for display
+        return view('partials.testresult', ['testResult' => $testResult]);
     }
 
     public function createTestResult(Request $request)
@@ -59,8 +72,15 @@ class TestResultController extends Controller
             'user_id' => $userId,
             'chars_values' => json_encode($questionSliderValues),
         ]);
-        return redirect()->route('showTestResult');
+        $testResult = TestResult::where('user_id', $userId)->latest()->first();
+        return redirect()->route('testResult.show', ['id' => $testResult->id]);
     }
 
+    public function showProfileResults()
+    {
+        $userId = auth()->id();
+        $testResults = TestResult::where('user_id', $userId)->latest()->get();
+        return view('partials.profileresults', compact('testResults'));
+    }
 
 }

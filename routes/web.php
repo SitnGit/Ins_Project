@@ -12,10 +12,32 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+//
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');;
+})->name('welcome');
+
+Route::middleware(['guest.only'])->group(function () {
+    // Only non-logged-in users can access the '/' route
+//    Route::get('/', function () {
+//        return redirect()->route('welcome');
+//    });
+
+
+    // Other routes...
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Routes that require authentication
+    Route::get('/questions', 'App\Http\Controllers\QuizQuestion@showQuestions')->name('questions');
+    Route::get('/test-results/{id}', 'App\Http\Controllers\TestResultController@show')
+        ->name('testResult.show');
+    Route::get('/show-profile-results', 'App\Http\Controllers\TestResultController@showProfileResults')->name('showProfileResults');
+});
+//
+//Route::get('/questions', function () {
+//    // ...
+//})->middleware('auth');
 
 Route::middleware([
     'auth:sanctum',
@@ -25,9 +47,12 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/questions', 'App\Http\Controllers\QuizQuestion@showQuestions')->name('questions');
 });
 
-Route::get('/questions', 'App\Http\Controllers\QuizQuestion@load');
+
+//Route::get('/questions', 'App\Http\Controllers\QuizQuestion@load');
 
 //Route::middleware([
 //    'auth:sanctum',
@@ -39,8 +64,11 @@ Route::get('/questions', 'App\Http\Controllers\QuizQuestion@load');
 //    })->name('welcome');
 //});
 
-Route::get('/questions', 'App\Http\Controllers\QuizQuestion@showQuestions')->name('questions');
 
 Route::post('/test-result', 'App\Http\Controllers\TestResultController@createTestResult')->name('createTestResult');
 
-Route::get('/show-test-results', 'App\Http\Controllers\TestResultController@showTestResult')->name('showTestResult');
+//Route::get('/show-test-results', 'App\Http\Controllers\TestResultController@showTestResult')->name('showTestResult');
+
+//Route::get('/show-profile-results', 'App\Http\Controllers\TestResultController@showProfileResults')->name('showProfileResults');
+
+
