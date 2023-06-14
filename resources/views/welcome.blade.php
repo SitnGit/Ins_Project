@@ -25,6 +25,7 @@
                 {{--                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>--}}
                 @livewire('navigation-menu')
             @else
+                <a class="items-center text-gray-800 text-2xl font-semibold mr-6" href="{{ route('welcome') }}">Home</a>
                 <a href="{{ route('login') }}"
                    class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
                     in</a>
