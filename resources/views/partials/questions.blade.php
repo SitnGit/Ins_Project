@@ -1,5 +1,8 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @livewire('navigation-menu')
+<div class="flex mt-10">
+    <h1 class="text-4xl mx-auto">OCEAN TEST</h1>
+</div>
 <div class="container mx-auto mt-24">
     <form action="{{ route('createTestResult') }}" method="POST">
         @csrf
@@ -9,9 +12,9 @@
                 <div class="flex my-12 justify-center">
                     <div class="text-3xl">{{ $question->description }}</div>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center justify-center">
                     <input type="range" min="0" max="100" step="1" name="sliderValues[{{ $question->id }}]"
-                           class="w-full mr-4">
+                           class="w-[500px] mr-4">
                     <span class="slider-value">0</span>
                     <input type="hidden" name="questionIds[]" value="{{ $question->id }}">
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Characteristic;
 use Illuminate\Http\Request;
 use App\Models\TestResult;
 use App\Models\Question;
@@ -31,6 +32,21 @@ class TestResultController extends Controller
         return view('partials.testresult', ['testResult' => $testResult]);
     }
 
+    public function calculateScore($sliderValue)
+    {
+        if ($sliderValue >= 1 && $sliderValue <= 20) {
+            return 1;
+        } elseif ($sliderValue > 20 && $sliderValue <= 40) {
+            return 2;
+        } elseif ($sliderValue > 40 && $sliderValue <= 60) {
+            return 3;
+        } elseif ($sliderValue > 60 && $sliderValue <= 80) {
+            return 4;
+        } else {
+            return 5;
+        }
+    }
+
     public function createTestResult(Request $request)
     {
 
@@ -46,35 +62,43 @@ class TestResultController extends Controller
 
 
         // Create an empty array to store the question IDs and slider values
-        $questionSliderValues = [];
-        for ($i = 1; $i <= 10; $i++) {
-            $questionSliderValues[strval($i)] = 0;
-        }
-        // Combine the question IDs and slider values into a dictionary
+        $characteristicScores = [];
+        $characteristicOccurrences = [];
         $questionIds = $validatedData['questionIds'];
         $sliderValues = $validatedData['sliderValues'];
-//        foreach ($questionIds as $index => $questionId) {
-//
-//            $sliderValue = $sliderValues[$questionId];
-//            $questionSliderValues[$questionId] = $sliderValue;
-//
-//        }
         foreach ($questionIds as $index => $questionId) {
             $question = Question::find($questionId);
             $chars = $question->characteristics;
-            $chars = json_decode($chars, true);
+            $characteristicIds = json_decode($chars, true);
             $sliderValue = intval($sliderValues[$questionId]);
-            $questionSliderValues[$chars["1"]] = $sliderValue;
-            $questionSliderValues[$chars["2"]] = 100 - $sliderValue;
+            $score = $this->calculateScore($sliderValue);
+
+            foreach ($characteristicIds as $characteristicId) {
+
+                if (!isset($characteristicScores[$characteristicId])) {
+                    $characteristicScores[$characteristicId] = 0;
+                    $characteristicOccurrences[$characteristicId] = 0;
+                }
+                $characteristicScores[$characteristicId] += $score;
+                $characteristicOccurrences[$characteristicId]++;
+            }
         }
+
+        foreach ($characteristicScores as $characteristicId => $score) {
+            $maxPossibleScore = $characteristicOccurrences[$characteristicId] * 5;
+            $percentage = ($score / $maxPossibleScore) * 100;
+            $characteristicScores[$characteristicId] = intval($percentage);
+        }
+        arsort($characteristicScores);
         // Create and store the TestResult object in the database
         TestResult::create([
             'user_id' => $userId,
-            'chars_values' => json_encode($questionSliderValues),
+            'chars_values' => json_encode($characteristicScores),
         ]);
         $testResult = TestResult::where('user_id', $userId)->latest()->first();
         return redirect()->route('testResult.show', ['id' => $testResult->id]);
     }
+
 
     public function showProfileResults()
     {
