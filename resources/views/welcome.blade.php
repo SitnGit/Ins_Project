@@ -12,45 +12,7 @@
     @vite('resources/js/app.js')
     <!-- Styles -->
 
-    <style>
-        .mainpart {
-            height: 70vh;
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
 
-        .mainpart img {
-            max-width: 70%;
-            max-height: 70%;
-            margin-bottom: 20px;
-        }
-
-        .btn-group {
-            margin-top: 20px;
-        }
-
-        .description {
-            margin-top: 40px;
-        }
-
-        .video-container {
-            width: 100%;
-            height: 40vh;
-            background-color: #000000;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -81,14 +43,20 @@
 </div>
 <x-banner/>
 
-<div class="video-container">
-    <video src="resources/media/video.webm" autoplay muted loop></video>
-</div>
 
-<div class="mainpart">
-    <img src="logo.jpg" alt="LOGOTO TUKA">
-    <h1 class="text-5xl text-cyan-700 font-bold my-12">OCEAN Personality Test</h1>
-    <div class="mx-20 text-xl">
+<div class="mainpart relative">
+    <div class="video-container">
+        <video class="opacity-90" src="{{@asset('media/video.webm')}}" autoplay muted loop></video>
+    </div>
+    <div class="flex justify-center"><img class="w-[960px]"
+                                          src="{{@asset("media/logo.jpg")}}"
+                                          alt="LOGO">
+    </div>
+
+    <h1 class="absolute top-20 left-[30rem] flex justify-center text-5xl text-cyan-700 font-bold my-12">OCEAN
+        Personality
+        Test</h1>
+    <div class="mx-20 my-10 text-xl">
         <p>The ocean personality test is based on the five-factor model, an empirical concept in psychology that
             measures five pre-dominant personality traits: openness, conscientiousness, extroversion, agreeableness, and
             neuroticism, making the acronym OCEAN. The ocean personality assessment can be used as a tool to make
@@ -97,7 +65,13 @@
             The ocean personality test is based on the five-factor model theory that suggests five broad trait domains
             as the foundation of different personalities. The model has gone through several iterations by various
             researchers between the 1960s through the 1990s. The ocean personality test remains to be the most popular
-            personality test in workplace-related situations.</p>
+            personality test in workplace-related situations.
+        </p>
+        <div class="text-2xl font-semibold text-cyan-600 my-12">In this test, you will be tested on 2 characteristics
+            from every
+            of the
+            5 traits in total 10 characteristics.
+        </div>
     </div>
 </div>
 <div class="mb-10">
