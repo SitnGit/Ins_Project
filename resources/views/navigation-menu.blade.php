@@ -2,8 +2,12 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="flex justify-end h-16">
-            <a class="flex items-center text-gray-800 text-2xl font-semibold" href="{{ route('welcome') }}">Home</a>
+        <div class="flex justify-between h-16">
+            <a class="flex items-center text-5xl text-cyan-700 font-bold" href="{{ route('welcome') }}">
+                <div>OCEAN Personality
+                    Test
+                </div>
+            </a>
             {{--            <div class="flex">--}}
             {{--                <!-- Logo -->--}}
             {{--                <div class="shrink-0 flex items-center">--}}

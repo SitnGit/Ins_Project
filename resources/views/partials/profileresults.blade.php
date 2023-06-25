@@ -4,7 +4,7 @@
     <h1 class="text-4xl mx-auto">All previous results</h1>
 </div>
 <div class="container mx-auto px-4 py-8">
-    <h3 class="text-lg font-bold">User ID: {{ Auth::user()->id }}</h3>
+    <h3 class="text-lg font-bold">You have taken {{ sizeof($testResults) }} tests.</h3>
 
     @foreach($testResults as $index => $testResult)
         <a href="{{ route('testResult.show', ['id' => $testResult->id]) }}"
